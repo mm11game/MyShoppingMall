@@ -246,4 +246,4 @@ const ShoppingDetail = (props) => {
   );
 };
 export default ShoppingDetail;
-//pusher === socket
+//pusher === socket // 훅?
