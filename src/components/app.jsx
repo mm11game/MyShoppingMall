@@ -37,10 +37,8 @@ import { cartCount, charCountState, itemsState } from "./atom";
 global.i18next = i18n;
 
 const MyApp = () => {
-  // Login screen demo data
   const [count, setCount] = useRecoilState(cartCount);
   const state = useRecoilValue(itemsState);
-  console.log("앱에서 카운트는 ", count);
 
   let loggedIn = !!getToken().token;
   const handleLogout = async () => {
@@ -68,7 +66,7 @@ const MyApp = () => {
     <App {...f7params}>
       {/* Left panel with cover effect*/}
       <Panel left cover>
-        <Page>
+        <Page hideToolbarOnScroll>
           <Navbar title="메뉴" />
           <PageContent>
             <List>
@@ -102,7 +100,6 @@ const MyApp = () => {
         </Page>
       </Panel>
       <Views tabs className="safe-areas">
-        {/* Tabbar for switching views-tabs */}
         <Toolbar tabbar labels bottom>
           <Link
             tabLink="#view-home"
@@ -111,25 +108,21 @@ const MyApp = () => {
             text="홈"
           />
           <Link tabLink="#view-shopping" icon="las la-gift" text="쇼핑" />
-          {/* <Link
-            tabLink="#view-users"
+          <Link
+            tabLink="#view-mypage"
             icon="las la-address-book"
             text="마이페이지"
           />
-          <Link tabLink="#view-contacts" icon="las la-edit" text="문의하기" /> */}
-          {loggedIn && (
-            <Link tabLink="#view-review" icon="las la-edit" text="리뷰하기" />
-          )}
-          {loggedIn && (
-            <Link
-              tabLink="#view-carts"
-              icon="las la-shopping-cart"
-              text="장바구니"
-              iconBadge={count}
-              badgeColor="red"
-            />
-          )}
+
+          <Link
+            tabLink="#view-carts"
+            icon="las la-shopping-cart"
+            text="장바구니"
+            iconBadge={count}
+            badgeColor="red"
+          />
         </Toolbar>
+
         <View
           id="view-home"
           main
@@ -138,15 +131,12 @@ const MyApp = () => {
           url="/"
           iosDynamicNavbar={false}
         />
-        {/* 
-        <View id="view-items" name="items" tab url="/items?is_main=true/" />
-        <View id="view-users" name="users" tab url="/users?is_main=true" /> */}
-        {loggedIn && <View id="view-review" name="review" tab url="/review" />}
-        {loggedIn && <View id="view-carts" name="carts" tab url="/carts" />}
+
+        <View id="view-mypage" name="mypage" tab url="/mypage" />
+        <View id="view-carts" name="carts" tab url="/carts" />
         <View id="view-sign_up" name="sign_up" tab url="/users/sign_up" />
         <View id="view-sign_in" name="sign_in" tab url="/users/sign_in" />
         <View id="view-shopping" name="shopping" tab url="/shopping" />
-        {/* <View id="view-payment" name="payment" tab url="/payment" /> */}
       </Views>
     </App>
   );

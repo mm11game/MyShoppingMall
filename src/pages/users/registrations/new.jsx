@@ -25,6 +25,7 @@ const SignUpSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "비밀번호가 일치하지 않습니다.")
     .required("필수 입력사항 입니다"),
   address1: Yup.string().required("필수 입력사항 입니다"),
+  address2: Yup.string().required("필수 입력사항 입니다"),
 
   phone: Yup.string().required("필수 입력사항 입니다"),
 });
@@ -41,7 +42,7 @@ const SignUpPage = () => {
           password: "",
           password_confirmation: "",
           address1: "",
-
+          address2: "",
           phone: "",
         }}
         validationSchema={SignUpSchema}
@@ -134,6 +135,18 @@ const SignUpPage = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.address1}
+                errorMessageForce={true}
+                errorMessage={touched.address && errors.address}
+              />
+              <ListInput
+                label={i18next.t("login.address2")}
+                type="text"
+                name="address2"
+                placeholder="주소를 입력해주세요"
+                clearButton
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.address2}
                 errorMessageForce={true}
                 errorMessage={touched.address && errors.address}
               />

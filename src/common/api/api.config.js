@@ -69,6 +69,7 @@ const refreshInterceptor = (axiosInstance) => (error) => {
 
 const headerTokenConfig = (config) => {
   const method = config.method.toUpperCase();
+
   if (method !== "OPTIONS") {
     let { csrf, token } = getToken();
     config.headers = {

@@ -8,6 +8,8 @@ import ShoppingDetail from "../pages/shoppingdetail.jsx";
 import Carts from "../pages/carts.jsx";
 import Payment from "../pages/payment.jsx";
 import Review from "../pages/review.jsx";
+import Mypage from "../pages/mypage.jsx";
+import NeedLogin from "../pages/needlogin.jsx";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -16,9 +18,13 @@ const routes = [
   { path: "/intro", component: IntroPage },
   { path: "/shopping", component: Shopping },
   { path: "/shopping/:id", component: ShoppingDetail },
+
   { path: "/carts", component: Carts },
   { path: "/payment", component: Payment },
   { path: "/review", component: Review },
+  { path: "/mypage", component: Mypage },
+  // { path: "/needtologin", component: NeedLogin },
+
   { path: "(.*)", component: NotFoundPage },
 ];
 

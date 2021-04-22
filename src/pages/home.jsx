@@ -8,6 +8,7 @@ import {
   Link,
   List,
   ListItem,
+  f7,
   Navbar,
   NavLeft,
   NavRight,
@@ -18,8 +19,10 @@ import {
 import React, { useState, useEffect } from "react";
 import { createAsyncPromise } from "../common/api/api.config";
 import "../css/swiper.css";
-
+import { getToken } from "../common/auth";
+import { logout } from "../common/api";
 const HomePage = () => {
+  let loggedIn = !!getToken().token;
   const images = [
     "airpods",
     "alexa",
@@ -28,14 +31,21 @@ const HomePage = () => {
     "mouse",
     "playstation",
   ];
-  const [items, setItems] = useState([]);
+  const [saleItems, setSaleItems] = useState([]);
+  const [filteredCategory, setFilteredCategory] = useState([]);
+
   useEffect(async () => {
-    let result = await createAsyncPromise("get", "/items/homeSale")();
-    setItems(() => result);
+    let result = await createAsyncPromise("get", "/items/homesales")();
+    setSaleItems(() => result);
   }, []);
 
+  const handleLogout = async () => {
+    await logout();
+    location.replace("/");
+  };
+
   return (
-    <Page name="home">
+    <Page name="home" hideToolbarOnScroll>
       <img src="https://user-images.githubusercontent.com/73922056/114502774-43eb7100-9c67-11eb-9bd8-cdc2c716578a.png"></img>
       <Navbar sliding={false}>
         <NavLeft>
@@ -46,6 +56,7 @@ const HomePage = () => {
             기운`s shop
           </a>
         </NavTitle>
+        <NavRight>{<Link iconMaterial="search" />}</NavRight>
       </Navbar>
       <p className="font-mono text-center mb-5">
         Only Today <span className="text-4xl ">BIG</span> off
@@ -53,14 +64,14 @@ const HomePage = () => {
       <Row>
         <Col>
           <Swiper pagination navigation scrollbar>
-            {items &&
-              items.map((item) => {
+            {saleItems &&
+              saleItems.map((item) => {
                 return (
                   <SwiperSlide key={item.id}>
                     <Link href={`/shopping/${item.id}`}>
                       <img
                         className="h-64 w-full"
-                        src={`http://localhost:3000/items/images/${item.name}`}
+                        src={`http://localhost:3000/items/images/${item.category}/${item.name}`}
                       ></img>
                     </Link>
                   </SwiperSlide>

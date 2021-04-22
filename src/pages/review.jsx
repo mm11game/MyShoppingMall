@@ -13,19 +13,31 @@ import {
   Icon,
   NavTitle,
   Page,
+  TextEditor,
   Card,
   Row,
   ListInput,
 } from "framework7-react";
 import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 
 import * as Yup from "yup";
 import { createAsyncPromise } from "../common/api/api.config";
 import { getToken } from "../common/auth/index.js";
+import { LineItemLength, orderIdForReview } from "../components/atom";
+
 const Review = () => {
   const [infos, setInfos] = useState([]);
+  const [orderId, setOrderId] = useRecoilState(orderIdForReview);
   const stars = [5, 4, 3, 2, 1];
+
   const SignInSchema = Yup.object().shape({
     title: Yup.string()
       .min(4, "길이가 너무 짧습니다")
@@ -38,15 +50,22 @@ const Review = () => {
     star: Yup.number(),
     item: Yup.string(),
   });
+
   useEffect(async () => {
-    let result = await createAsyncPromise("get", "/items/paystate")();
+    if (!getToken().token) {
+      return;
+    }
+    let body = {
+      order_id: orderId,
+    };
+
+    let result = await createAsyncPromise("post", "/items/reviewables")(body);
     setInfos(() => result);
-  }, []);
-  console.log("인포는", infos);
+  }, [orderId]);
 
   return (
-    <Page>
-      <Navbar title="리뷰" />
+    <Page noToolbar>
+      <Navbar title="리뷰" backLink="back" />
       {infos[0] && infos.length !== 0 ? (
         <Formik
           initialValues={{
@@ -61,11 +80,7 @@ const Review = () => {
             f7.dialog.preloader("정보를 확인중입니다");
 
             try {
-              let x = await createAsyncPromise(
-                "post",
-                "/items/reviewed"
-              )(values);
-
+              await createAsyncPromise("post", "/items/reviewed")(values);
               f7.dialog.close();
               location.replace("/");
             } catch (error) {
@@ -126,7 +141,6 @@ const Review = () => {
                 <ListInput
                   name="title"
                   type="text"
-                  label="제목"
                   placeholder="제목"
                   clearButton
                   onChange={handleChange}
@@ -137,10 +151,8 @@ const Review = () => {
                 />
                 <ListInput
                   name="content"
-                  type="text"
-                  label="내용"
+                  type="textarea"
                   placeholder="내용"
-                  clearButton
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.content}

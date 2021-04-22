@@ -31,15 +31,17 @@ import {
 } from "recoil";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { createAsyncPromise } from "../common/api/api.config";
+import { getToken } from "../common/auth/index.js";
 import CartList from "../components/cartlist";
 import {
   cartCount,
   cartItems,
   charCountState,
+  deliveryPrice,
   itemsState,
 } from "../components/atom.js";
+import NeedLogin from "./needlogin";
 
 const Carts = () => {
   const [items, setItems] = useState([]);
@@ -47,12 +49,12 @@ const Carts = () => {
   const [state, setState] = useRecoilState(itemsState);
   const [cartNum, setCartNum] = useRecoilState(cartCount);
   const [myCartItems, setMyCartItems] = useRecoilState(cartItems);
-
+  const priceForDelivery = useRecoilValue(deliveryPrice);
   useEffect(async () => {
-    if (!localStorage.getItem("practice_token")) {
+    if (!getToken().token) {
       return;
     }
-    let result = await createAsyncPromise("post", "/items/cartlist")();
+    let result = await createAsyncPromise("get", "/items/cart")();
     setItems(() => result.LineItems);
     setCartNum(() =>
       result.LineItems === undefined
@@ -62,52 +64,22 @@ const Carts = () => {
         : result.LineItems.length
     );
     setMyCartItems(result.LineItems);
+
+    let allCartItemsId = [];
+    result.LineItems?.forEach((e) => allCartItemsId.push(e.id));
+    setChecks(() => allCartItemsId);
   }, [state]);
 
   const handleAllDelete = async () => {
-    let body = {
-      lineitemid: checks,
-    };
-    let result = await createAsyncPromise(
-      "post",
-      "/items/cartlistdelall"
-    )(body);
+    await createAsyncPromise("delete", `/items/carts/${checks}`)();
 
-    setChecks(checks.filter((e) => e !== e));
-    setState((prev) => !prev);
+    setState((e) => e + 1);
   };
 
   const handleDelete = async (itemId, optionId) => {
-    let body = {
-      option_id: optionId,
-    };
-    let result = await createAsyncPromise("post", "/items/cartlistdel")(body);
-    setChecks(
-      checks.filter((e) => {
-        return e !== itemId;
-      })
-    );
-    setState((prev) => !prev);
-  };
+    await createAsyncPromise("delete", `/items/cart/${optionId}`)();
 
-  const handleChecked = (checked, itemId, optionId) => {
-    if (checked) {
-      setChecks([...checks, itemId]);
-    } else {
-      setChecks(
-        checks.filter((e) => {
-          return e !== itemId;
-        })
-      );
-    }
-  };
-
-  const handleAllChecked = (checked) => {
-    if (checked) {
-      setChecks([...items.map((item) => item.id)]);
-    } else {
-      setChecks([]);
-    }
+    setState((e) => e + 1);
   };
 
   const handleQuantityChange = async (itemId, quantity, optionId) => {
@@ -116,35 +88,24 @@ const Carts = () => {
       quantity: quantity,
       option: optionId,
     };
-    let result = await createAsyncPromise("post", "/items/cartchange")(body);
+    await createAsyncPromise("patch", "/items/cart")(body);
     setState((prev) => {
       return !prev;
     });
   };
-  // background-color: #ffc604;
-  // opacity: 0.8;
-  //items-center / content-center
-  return (
-    <Page>
+
+  return getToken().token ? (
+    <Page hideToolbarOnScroll>
       <Navbar title="카트" />
       {items && items.length !== 0 ? (
         <>
-          <div className="flex mt-3 bg-yellow-300 h-10 items-center">
-            <input
-              className="ml-2"
-              name="check"
-              type="checkbox"
-              onChange={(e) => {
-                handleAllChecked(e.target.checked);
-              }}
-              checked={
-                checks.length === 0 ? false : checks.length === items.length
-              }
-            ></input>
-            <div className="border-2 font-sans text-base ml-2">전체선택</div>
-            <Link onClick={handleAllDelete}>
-              <Icon f7="trash" size="23px" color="black"></Icon>
-            </Link>
+          <div className="flex mt-3 bg-yellow-200 h-8 items-center">
+            <div className="float-right w-full mr-5">
+              <Link onClick={handleAllDelete} className="float-right">
+                <Icon f7="trash" size="23px" color="black"></Icon>
+                <span>전체삭제</span>
+              </Link>
+            </div>
           </div>
 
           <Block>
@@ -152,27 +113,28 @@ const Carts = () => {
               <CartList
                 items={items}
                 handleDelete={handleDelete}
-                handleChecked={handleChecked}
                 handleQuantityChange={handleQuantityChange}
-                checks={checks}
               />
             )}
           </Block>
+          <div className="text-base sborder flex justify-center mt-3 bg-yellow-100 h-8 items-center font-bold">
+            배송비 : {priceForDelivery.toLocaleString()}￦
+          </div>
 
-          <Row>
-            <Col>
-              {items && (
-                <div className="text-base border mb-3 flex justify-center mt-3 bg-yellow-300 h-10 items-center">
-                  총
-                  {items &&
+          {items && (
+            <div className="text-base border mb-3 my-0 flex justify-center bg-yellow-200 h-8 items-end font-bold align-bottom">
+              <span className="mr-2 text-lg">총</span>
+              <span className="text-2xl">
+                {items &&
+                  (
                     items.reduce((acc, cur) => {
                       return acc + cur.total * cur.Option.sale;
-                    }, 0)}
-                  원 입니다
-                </div>
-              )}
-            </Col>
-          </Row>
+                    }, 0) + priceForDelivery
+                  ).toLocaleString()}
+              </span>
+              <span className="text-xl">￦</span>
+            </div>
+          )}
 
           <Button
             className="button button-fill button-large disabled:opacity-50 mx-1"
@@ -188,6 +150,8 @@ const Carts = () => {
         </div>
       )}
     </Page>
+  ) : (
+    <NeedLogin />
   );
 };
 

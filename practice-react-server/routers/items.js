@@ -1,24 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const { auth } = require("../middleware/auth");
 const itemsController = require("../controller/items");
+const { auth } = require("../middleware/auth");
 
-router.get("/list", itemsController.list);
-router.get("/detail/:id", itemsController.detail);
-router.get("/images/:name", itemsController.images);
-router.get("/homeSale", itemsController.homeSale);
+router.get("/lists", itemsController.lists);
+router.get("/lists/:id", auth, itemsController.detail);
+router.get("/homesales", itemsController.homeSales); //
 
-router.post("/pushcart", auth, itemsController.pushcart);
-router.post("/cartchange", auth, itemsController.cartchange);
-router.post("/cartlist", auth, itemsController.cartlist);
-router.post("/cartlistdel", auth, itemsController.cartlistdel);
-router.post("/cartlistdelall", auth, itemsController.cartlistdelall);
+router.get("/images/:category/:name", itemsController.images);
 
-router.post("/like", auth, itemsController.like);
+router.get("/cart", auth, itemsController.cartList);
+router.post("/cart", auth, itemsController.pushCart);
+router.patch("/cart", auth, itemsController.cartChange);
+router.delete("/cart/:optionid", auth, itemsController.cartListDel);
+router.delete("/carts/:line_item_ids", auth, itemsController.cartListDelAll);
 
-router.post("/payment", auth, itemsController.payment);
-router.get("/paystate", auth, itemsController.paystate);
+router.post("/likes", auth, itemsController.likes);
+router.get("/likes", auth, itemsController.userLikes);
+
+router.get("/payment", auth, itemsController.payState);
+router.patch("/payment", auth, itemsController.payment);
+
+router.post("/reviewables", auth, itemsController.reviewAbles);
 router.post("/reviewed", auth, itemsController.reviewed);
-router.post("/seeReviews/:id", itemsController.seeReviews);
+router.post("/see_reviews/:id", itemsController.seeReviews);
+
+router.patch("/delivery", auth, itemsController.deliveryFinish);
 
 module.exports = router;

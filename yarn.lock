@@ -6322,7 +6322,7 @@
   "resolved" "https://registry.npmjs.org/react-async/-/react-async-10.0.1.tgz"
   "version" "10.0.1"
 
-"react-daum-postcode@^2.0.4":
+"react-daum-postcode@^2.0.6":
   "integrity" "sha512-CuDM0WdVgdTeu07uG12iHlECLYsJahZF8yFTLuwkOD09DiepbjrLc8B7Qxt/ebkfXh3v3KXuUY5hyK6Y3rnVSA=="
   "resolved" "https://registry.npmjs.org/react-daum-postcode/-/react-daum-postcode-2.0.6.tgz"
   "version" "2.0.6"

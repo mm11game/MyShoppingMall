@@ -9,17 +9,9 @@ import {
   Stepper,
 } from "framework7-react";
 
-import React, { useState } from "react";
-import { createAsyncPromise } from "../common/api/api.config";
+import React from "react";
 
-const CartList = ({
-  items,
-  handleDelete,
-  handleChecked,
-  handleQuantityChange,
-  checks,
-}) => {
-  console.log("카트리스틈ㄴ이ㅏㄹ마ㅣㄴㄹ", items && items);
+const CartList = ({ items, handleDelete, handleQuantityChange }) => {
   return (
     <>
       {items &&
@@ -27,8 +19,8 @@ const CartList = ({
           return (
             <List mediaList className="h-30 mt-3" key={item.id}>
               <ListItem
-                className="border-yellow-300 border-t-4 border-b-0"
-                title={item.Option.Item.name}
+                className="border-yellow-300 border-t-4 p-1"
+                title={<div className="text-lg">{item.Option.Item.name}</div>}
                 after={
                   <Link
                     onClick={() => {
@@ -39,19 +31,18 @@ const CartList = ({
                     <Icon f7="xmark" size="20px" color="red"></Icon>
                   </Link>
                 }
-                subtitle={item.Option.itemoption}
-                text={item.total + "/" + item.total * item.Option.sale}
+                subtitle={
+                  <div className="text-gray-500 p-0">
+                    {item.Option.itemoption}
+                  </div>
+                }
+                text={
+                  <div className="text-black text-lg">
+                    {(item.total * item.Option.sale).toLocaleString()}￦
+                  </div>
+                }
               >
                 {item.quantity + " 개"}
-
-                <input
-                  className="invisible"
-                  onChange={(e) => {
-                    handleChecked(e.target.checked, item.id, item.Option.id);
-                  }}
-                  type="checkbox"
-                  checked={checks.includes(item.id) ? true : false}
-                ></input>
 
                 <Stepper
                   raised
@@ -67,8 +58,8 @@ const CartList = ({
 
                 <img
                   slot="media"
-                  src={`http://localhost:3000/items/images/${item.Option.Item.name}`}
-                  width="120px"
+                  src={`http://localhost:3000/items/images/${item.Option.Item.category}/${item.Option.Item.name}`}
+                  width="110px"
                 />
               </ListItem>
             </List>

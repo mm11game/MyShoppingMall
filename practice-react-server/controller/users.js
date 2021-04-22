@@ -1,37 +1,32 @@
 const { Item, Like, LineItem, Opiton, Order, User } = require("../models");
 const { verifyToken, getUserId, generateToken } = require("../token/token");
 const { auth } = require("../middleware/auth");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 module.exports = {
   login: async (req, res) => {
-    const email = req.body.user.email;
-    const password = req.body.user.password;
-
-    let result = await User.findOne({
-      attributes: ["id", "name", "email", "phone", "address"],
-      where: { email: email, password: password },
+    const { email, password } = req.body.user;
+    let me = await User.findOne({
+      where: { email: email },
     });
-    try {
-      if (!result) {
-        res.send("없음");
-      } else {
+    if (!me) {
+      res.send("해당유저없음");
+    }
+
+    bcrypt.compare(password, me.password, (err, result) => {
+      if (result) {
         let myToken = generateToken(email);
         res.status(200).send({ token: myToken });
+      } else {
+        res.send("실패");
       }
-    } catch (err) {
-      res.send(err);
-    }
+    });
   },
   signup: async (req, res) => {
-    const name = req.body.user.name;
-    const email = req.body.user.email;
-    const password = req.body.user.password;
-    const address = req.body.user.address1;
-    const phone = req.body.user.phone;
-
+    const { name, email, password, address1, address2, phone } = req.body.user;
     try {
       const result = await User.findOne({
-        attributes: ["id", "name", "email", "phone", "address"],
         where: {
           email,
         },
@@ -39,15 +34,21 @@ module.exports = {
       if (result) {
         res.send("이메일이 존재");
       } else {
-        let info = await User.create({
-          name,
-          email,
-          password,
-          address,
-          phone,
+        bcrypt.genSalt(saltRounds, (err, salt) => {
+          bcrypt.hash(password, salt, async (err, hash) => {
+            let hashedPassword = hash;
+            let info = await User.create({
+              name,
+              email,
+              password: hashedPassword,
+              address1,
+              address2,
+              phone,
+            });
+            let myToken = generateToken(email);
+            res.send({ token: myToken });
+          });
         });
-        let myToken = generateToken(email);
-        res.send({ token: myToken });
       }
     } catch (err) {
       res.send(err);
