@@ -9,7 +9,7 @@ import Carts from "../pages/carts.jsx";
 import Payment from "../pages/payment.jsx";
 import Review from "../pages/review.jsx";
 import Mypage from "../pages/mypage.jsx";
-import NeedLogin from "../pages/needlogin.jsx";
+import Coupons from "../pages/coupons.jsx";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -23,7 +23,7 @@ const routes = [
   { path: "/payment", component: Payment },
   { path: "/review", component: Review },
   { path: "/mypage", component: Mypage },
-  // { path: "/needtologin", component: NeedLogin },
+  { path: "/coupons", component: Coupons },
 
   { path: "(.*)", component: NotFoundPage },
 ];

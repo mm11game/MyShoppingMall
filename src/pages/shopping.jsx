@@ -98,7 +98,7 @@ const Shopping = () => {
           </Button>
         </Col>
       </Row>
-      <Row className="flex flex-wrap  justify-center grid grid-cols-2 px-1">
+      <Row className="flex flex-wrap  justify-center grid grid-cols-2 px-1 md:grid-cols-5">
         {filteredProducts.map((product) => {
           return (
             <Block key={product.id} className="h-72">

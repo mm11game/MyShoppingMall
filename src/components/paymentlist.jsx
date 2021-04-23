@@ -93,7 +93,7 @@ const PaymentList = ({ orderInfos }) => {
                   배송중
                 </div>
                 <Button
-                  color="yellow"
+                  color="red"
                   small
                   fill
                   outline

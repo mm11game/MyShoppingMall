@@ -40,3 +40,8 @@ export const deliveryPrice = atom({
   key: "deliveryPrice",
   default: 2500,
 });
+
+export const myCoupons = atom({
+  key: "myCoupons",
+  default: [],
+});

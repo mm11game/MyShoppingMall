@@ -135,7 +135,7 @@ const ShoppingDetail = (props) => {
   };
 
   return (
-    <Page noToolbar>
+    <Page hideToolbarOnScroll>
       <Navbar title={detail?.name} backLink="back" />
       <Row>
         <Col className="p-5">

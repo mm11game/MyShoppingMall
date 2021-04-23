@@ -8,6 +8,8 @@ const {
   User,
   Review,
   sequelize,
+  Coupon,
+  Destination,
 } = require("../models");
 const lineitem = require("../models/lineitem");
 const { verifyToken, getUserId, generateToken } = require("../token/token");
@@ -320,11 +322,13 @@ module.exports = {
     let Name = req.body.params.name; // 주소지로 보낼사람 이름
     let Address1 = req.body.params.address1; //상품을 보낼 주소
     let Address2 = req.body.params.address2; //상품을 보낼 주소
-    let CartItemInfos = req.body.params.infos; //상품들
+    let OrderId = req.body.params.infos; //상품들
+    let Phone = req.body.params.phone;
     let PriceToMileage = req.body.params.pricetomileage; //상품 전체 가격
+    let UsedMileage = req.body.params.mileage;
 
     await Order.update(
-      { state: "pay", destination: Address1 + Address2 + Name + CartItemInfos },
+      { state: "pay" },
       {
         where: {
           user_id: req.userid,
@@ -332,9 +336,17 @@ module.exports = {
         },
       }
     );
+    await Destination.create({
+      name: Name,
+      address1: Address1,
+      address2: Address2,
+      phone: Phone,
+      order_id: OrderId,
+    });
+
     let myUser = await User.findByPk(req.userid);
     let currrentMileage = myUser.mileage;
-    let nextMileage = currrentMileage + PriceToMileage;
+    let nextMileage = currrentMileage + PriceToMileage - UsedMileage;
 
     await User.update(
       { mileage: nextMileage },
@@ -495,5 +507,14 @@ module.exports = {
       }
     );
     res.send(result);
+  },
+
+  //get
+  coupons: async (req, res) => {
+    let userId = req.userid;
+    let result = await Coupon.findAll({
+      where: { user_id: userId },
+    });
+    res.status(200).send(result);
   },
 };

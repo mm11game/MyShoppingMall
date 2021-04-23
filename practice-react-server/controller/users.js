@@ -1,4 +1,12 @@
-const { Item, Like, LineItem, Opiton, Order, User } = require("../models");
+const {
+  Item,
+  Like,
+  LineItem,
+  Opiton,
+  Order,
+  User,
+  Coupon,
+} = require("../models");
 const { verifyToken, getUserId, generateToken } = require("../token/token");
 const { auth } = require("../middleware/auth");
 const bcrypt = require("bcrypt");
@@ -11,7 +19,9 @@ module.exports = {
       where: { email: email },
     });
     if (!me) {
-      res.send("해당유저없음");
+      let err = new Error();
+      res.status(401).send(err);
+      return;
     }
 
     bcrypt.compare(password, me.password, (err, result) => {
@@ -46,6 +56,13 @@ module.exports = {
               phone,
             });
             let myToken = generateToken(email);
+
+            await Coupon.create({
+              name: "신규가입쿠폰",
+              user_id: info.id,
+              cost: "5000",
+            });
+
             res.send({ token: myToken });
           });
         });

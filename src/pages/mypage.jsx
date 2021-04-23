@@ -14,7 +14,7 @@ import {
 import { useRecoilState } from "recoil";
 import React, { useState, useEffect } from "react";
 import { createAsyncPromise } from "../common/api/api.config";
-import { itemsState } from "../components/atom.js";
+import { itemsState, myCoupons } from "../components/atom.js";
 import { getToken } from "../common/auth/index.js";
 
 import PaymentList from "../components/paymentlist";
@@ -25,6 +25,7 @@ const Mypage = () => {
   const [userLikes, setUserLikes] = useState([]);
   const [orderInfos, setOrderInfos] = useState([]);
   const [state, setState] = useRecoilState(itemsState);
+  const [coupons, setCoupons] = useRecoilState(myCoupons);
 
   useEffect(async () => {
     if (!getToken().token) {
@@ -33,7 +34,9 @@ const Mypage = () => {
     let userinfo = await createAsyncPromise("get", "/userinfo")();
     let myLikes = await createAsyncPromise("get", "/items/likes")();
     let payState = await createAsyncPromise("get", "/items/payment")();
+    let myCoupons = await createAsyncPromise("get", "/items/coupon")();
 
+    setCoupons(() => myCoupons);
     setUserInfo(() => userinfo);
     setUserLikes(() => myLikes);
     setOrderInfos(() => payState);
@@ -86,13 +89,17 @@ const Mypage = () => {
             </div>
           </Col>
           <Col>
-            <Icon
-              f7="ticket"
-              size="55px"
-              className="float-left mr-4 mt-2"
-            ></Icon>
-            <p className="text-lg font-bold mt-2">쿠폰</p>
-            <p className="text-base">0개</p>
+            <Link href="/coupons">
+              <Icon
+                f7="ticket"
+                size="55px"
+                className="float-left mr-4 mt-2"
+              ></Icon>
+              <div>
+                <div className="text-lg font-bold mt-2">쿠폰</div>
+                <div className="text-base">{coupons?.length}개</div>
+              </div>
+            </Link>
           </Col>
         </Row>
 

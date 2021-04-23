@@ -27,4 +27,6 @@ router.post("/see_reviews/:id", itemsController.seeReviews);
 
 router.patch("/delivery", auth, itemsController.deliveryFinish);
 
+router.get("/coupon", auth, itemsController.coupons);
+
 module.exports = router;

@@ -46,7 +46,11 @@ const HomePage = () => {
 
   return (
     <Page name="home" hideToolbarOnScroll>
-      <img src="https://user-images.githubusercontent.com/73922056/114502774-43eb7100-9c67-11eb-9bd8-cdc2c716578a.png"></img>
+      <div className="flex flex-col justify-center">
+        {" "}
+        <img src="https://user-images.githubusercontent.com/73922056/114502774-43eb7100-9c67-11eb-9bd8-cdc2c716578a.png"></img>
+      </div>
+
       <Navbar sliding={false}>
         <NavLeft>
           <Link icon="las la-bars" panelOpen="left" />
@@ -70,7 +74,7 @@ const HomePage = () => {
                   <SwiperSlide key={item.id}>
                     <Link href={`/shopping/${item.id}`}>
                       <img
-                        className="h-64 w-full"
+                        className="h-full w-full"
                         src={`http://localhost:3000/items/images/${item.category}/${item.name}`}
                       ></img>
                     </Link>

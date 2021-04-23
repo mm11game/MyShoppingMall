@@ -36,10 +36,7 @@ const SessionNewPage = () => {
             location.replace("/");
           } catch (error) {
             f7.dialog.close();
-            toast
-              .get()
-              .setToastText(error?.response?.data || error?.message)
-              .openToast();
+            f7.dialog.alert("", "아이디 또는 비밀번호가 맞지 않습니다");
           }
         }}
         validateOnMount={true}

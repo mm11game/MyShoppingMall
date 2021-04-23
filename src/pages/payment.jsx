@@ -36,7 +36,10 @@ import {
   cartItems,
   deliveryPrice,
   itemsState,
+  myCoupons,
 } from "../components/atom.js";
+import * as Yup from "yup";
+import { Formik } from "formik";
 
 const Payment = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -50,6 +53,10 @@ const Payment = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [myAddress1, setMyAddress1] = useState("");
   const [myAddress2, setMyAddress2] = useState("");
+  const [myMileage, setMyMileage] = useState(0);
+  const [coupons, setCoupons] = useRecoilState(myCoupons);
+  const [couponCost, setCouponCost] = useState(coupons[0]?.cost);
+  const [couponId, setCouponId] = useState(coupons[0]?.id);
 
   useEffect(async () => {
     if (!getToken().token) {
@@ -60,6 +67,11 @@ const Payment = () => {
     let itemInfos = await createAsyncPromise("get", "/items/cart")();
     setItems(() => itemInfos.LineItems);
   }, [state]);
+
+  const calculatedPrice =
+    items?.reduce((acc, cur) => {
+      return acc + cur.total * cur.Option.sale;
+    }, 0) + priceForDelivery;
 
   const handleName = (e) => {
     setName(() => e.target.value);
@@ -73,24 +85,21 @@ const Payment = () => {
   const handleAddress2 = (e) => {
     setMyAddress2(() => e.target.value);
   };
-
   const handleSearchPostToggle = () => {
     setSearchPostToggle((old) => !old);
   };
 
   const handlePayment = async () => {
-    if (!getToken().token) {
-      return;
-    }
     let price = items?.reduce((acc, cur) => {
       return acc + cur.total * cur.Option.sale;
     }, 0);
     let body = {
       name,
+      mileage: myMileage,
       phone: phoneNumber,
       address1: myAddress1,
       address2: myAddress2,
-      infos: myCartItems,
+      infos: myCartItems[0]?.order_id,
       pricetomileage: price * 0.1,
     };
     await createAsyncPromise("patch", "/items/payment")(body);
@@ -123,8 +132,18 @@ const Payment = () => {
     setMyAddress1(() => userInfo?.address1);
     setMyAddress2(() => userInfo?.address2);
   };
+
+  const handleMileage = (e) => {
+    setMyMileage(() => e.target.value);
+  };
+  const handleChange = (e) => {
+    setCouponCost(e.target.value);
+    setCouponId(e.target.id);
+  };
+
+  console.log("=============", couponCost, coupons[0].cost);
   return (
-    <Page hideToolbarOnScroll>
+    <Page noToolbar>
       <Navbar title="결제" backLink="Back" />
 
       <BlockTitle className="flex items-center text-lg font-black bg-yellow-200 h-8 p-2">
@@ -151,14 +170,8 @@ const Payment = () => {
                 배송비 {priceForDelivery.toLocaleString()}￦
               </div>
               <div className="font-bold text-base  float-right">
-                총
                 <span className="font-bold text-2xl">
-                  {(
-                    items?.reduce((acc, cur) => {
-                      return acc + cur.total * cur.Option.sale;
-                    }, 0) + priceForDelivery
-                  ).toLocaleString()}
-                  ￦
+                  {(calculatedPrice - myMileage).toLocaleString()}￦
                 </span>
               </div>
               <div className="line-through text-base mb-0 float-right text-gray-500">
@@ -173,6 +186,42 @@ const Payment = () => {
           </Row>
         </CardContent>
       </Card>
+      <List inlineLabels noHairlinesMd className="px-4 mb-6 mt-1">
+        <ListInput
+          label="마일리지"
+          min="0"
+          max={
+            calculatedPrice > userInfo.mileage
+              ? userInfo.mileage
+              : calculatedPrice
+          }
+          type="number"
+          placeholder={userInfo.mileage?.toLocaleString()}
+          validate
+          errorMessageForce={true}
+          onChange={handleMileage}
+        ></ListInput>
+        <ListInput
+          label="쿠폰"
+          type="select"
+          defaultValue={coupons[0].cost}
+          value={coupons[0].cost}
+          onChange={handleChange}
+        >
+          {coupons.map((coupon) => {
+            return (
+              <option
+                name="coupons"
+                key={coupon.id}
+                value={coupon.cost}
+                id={coupon.id}
+              >
+                {coupon.name} : {coupon.cost}
+              </option>
+            );
+          })}
+        </ListInput>
+      </List>
       <BlockTitle className="flex items-center text-lg font-black bg-yellow-200 h-8 p-2">
         <Icon material="account_box" size="24px"></Icon>{" "}
         <p className="ml-2">주문자 정보</p>

@@ -31,12 +31,17 @@ import {
 import * as Yup from "yup";
 import { createAsyncPromise } from "../common/api/api.config";
 import { getToken } from "../common/auth/index.js";
-import { LineItemLength, orderIdForReview } from "../components/atom";
+import {
+  itemsState,
+  LineItemLength,
+  orderIdForReview,
+} from "../components/atom";
 
 const Review = () => {
   const [infos, setInfos] = useState([]);
   const [orderId, setOrderId] = useRecoilState(orderIdForReview);
   const stars = [5, 4, 3, 2, 1];
+  const [state, setState] = useRecoilState(itemsState);
 
   const SignInSchema = Yup.object().shape({
     title: Yup.string()
@@ -61,7 +66,7 @@ const Review = () => {
 
     let result = await createAsyncPromise("post", "/items/reviewables")(body);
     setInfos(() => result);
-  }, [orderId]);
+  }, [orderId, state]);
 
   return (
     <Page noToolbar>
