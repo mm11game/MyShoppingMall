@@ -24,8 +24,8 @@ const Mypage = () => {
   const [userinfo, setUserInfo] = useState("");
   const [userLikes, setUserLikes] = useState([]);
   const [orderInfos, setOrderInfos] = useState([]);
-  const [state, setState] = useRecoilState(itemsState);
   const [coupons, setCoupons] = useRecoilState(myCoupons);
+  const [state, setState] = useRecoilState(itemsState);
 
   useEffect(async () => {
     if (!getToken().token) {

@@ -42,7 +42,7 @@ module.exports = {
         },
       });
       if (result) {
-        res.send("이메일이 존재");
+        throw res.status(401).send(err);
       } else {
         bcrypt.genSalt(saltRounds, (err, salt) => {
           bcrypt.hash(password, salt, async (err, hash) => {

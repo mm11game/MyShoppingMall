@@ -105,7 +105,6 @@ export { PlainAPI, API, API_URL, version };
 export const createAsyncPromise = (method, path) => {
   return async (props) => {
     try {
-      // if (signal) console.log(signal)
       const res = await API[method.toLowerCase()](path, { params: props });
       return res.data;
     } catch (e) {

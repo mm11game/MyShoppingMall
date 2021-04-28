@@ -50,6 +50,7 @@ const Carts = () => {
   const [cartNum, setCartNum] = useRecoilState(cartCount);
   const [myCartItems, setMyCartItems] = useRecoilState(cartItems);
   const priceForDelivery = useRecoilValue(deliveryPrice);
+
   useEffect(async () => {
     if (!getToken().token) {
       return;
@@ -72,13 +73,11 @@ const Carts = () => {
 
   const handleAllDelete = async () => {
     await createAsyncPromise("delete", `/items/carts/${checks}`)();
-
     setState((e) => e + 1);
   };
 
   const handleDelete = async (itemId, optionId) => {
     await createAsyncPromise("delete", `/items/cart/${optionId}`)();
-
     setState((e) => e + 1);
   };
 

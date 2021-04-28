@@ -59,6 +59,9 @@ module.exports = {
   //post
   pushCart: async (req, res) => {
     let body = req.body.params;
+    let myItemId = req.body.itemId;
+    let myQuantity = req.body.quantity;
+    let myOption = req.body.option;
 
     if (body.option === "") {
       res.send("옵션을 추가해라");
@@ -326,6 +329,7 @@ module.exports = {
     let Phone = req.body.params.phone;
     let PriceToMileage = req.body.params.pricetomileage; //상품 전체 가격
     let UsedMileage = req.body.params.mileage;
+    let MyCouponId = req.body.params.couponId;
 
     await Order.update(
       { state: "pay" },
@@ -356,6 +360,7 @@ module.exports = {
         },
       }
     );
+    await Coupon.destroy({ where: { id: MyCouponId } });
     res.send("완료");
   },
 

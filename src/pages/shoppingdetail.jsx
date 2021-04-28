@@ -72,7 +72,7 @@ const ShoppingDetail = (props) => {
       }
     });
     setOptionName(() => result.Options[0].itemoption);
-  }, [state]);
+  }, []);
 
   const handleReviews = async (body) => {
     let result = await createAsyncPromise(
@@ -117,19 +117,18 @@ const ShoppingDetail = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!!optionName) {
-      showToastIcon("장바구니 등록");
-    } else {
-      showToastErr("옵션을 골라주세요");
-    }
+    showToastIcon("장바구니 등록");
     let body = {
       itemId: detail.id,
       quantity: number,
       option: optionName,
     };
+    console.log("=================바디는?", body);
+    console.log("옵션이름은?=========", optionName);
     let result = await createAsyncPromise("post", "items/cart")(body);
     setState((e) => e + 1);
   };
+
   const waringForLogin = () => {
     f7.dialog.alert("", "로그인이 필요합니다!");
   };

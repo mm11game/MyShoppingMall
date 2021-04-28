@@ -52,14 +52,19 @@ const SignUpPage = () => {
           f7.dialog.preloader("잠시만 기다려주세요...");
           try {
             (await signup({ user: values })).data;
-            // toast.get().setToastText("로그인 되었습니다.").openToast();
+            f7.toast.show({
+              position: "top",
+              text: "로그인 되었습니다.",
+              closeTimeout: 2000,
+            });
             location.replace("/");
           } catch (error) {
             f7.dialog.close();
-            toast
-              .get()
-              .setToastText(error?.response?.data || error?.message)
-              .openToast();
+            f7.toast.show({
+              position: "top",
+              text: "이미 가입된 이메일이 있습니다.",
+              closeTimeout: 2000,
+            });
           }
         }}
         validateOnMount={true}

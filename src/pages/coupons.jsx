@@ -7,13 +7,13 @@ const Coupons = () => {
   const [coupons, setCoupons] = useRecoilState(myCoupons);
 
   return (
-    <Page>
+    <Page noToolbar>
       <Navbar backLink="back" />
       <div>누구누구의 쿠폰</div>
       <List>
         {coupons.map((coupon) => {
           return (
-            <div>
+            <div key={coupon.id}>
               <div>{coupon.name}</div>
               <div>{coupon.cost}</div>
             </div>

@@ -43,20 +43,20 @@ import { Formik } from "formik";
 
 const Payment = () => {
   const [userInfo, setUserInfo] = useState({});
-  const [state, setState] = useRecoilState(itemsState);
-  const [myCartItems, setMyCartItems] = useRecoilState(cartItems);
   const [items, setItems] = useState([]);
   const [searchPostToggle, setSearchPostToggle] = useState(false);
   const priceForDelivery = useRecoilValue(deliveryPrice);
+  const [state, setState] = useRecoilState(itemsState);
+  const [myCartItems, setMyCartItems] = useRecoilState(cartItems);
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [myAddress1, setMyAddress1] = useState("");
   const [myAddress2, setMyAddress2] = useState("");
   const [myMileage, setMyMileage] = useState(0);
+
   const [coupons, setCoupons] = useRecoilState(myCoupons);
-  const [couponCost, setCouponCost] = useState(coupons[0]?.cost);
-  const [couponId, setCouponId] = useState(coupons[0]?.id);
+  const [couponCost, setCouponCost] = useState("");
 
   useEffect(async () => {
     if (!getToken().token) {
@@ -93,6 +93,7 @@ const Payment = () => {
     let price = items?.reduce((acc, cur) => {
       return acc + cur.total * cur.Option.sale;
     }, 0);
+
     let body = {
       name,
       mileage: myMileage,
@@ -101,7 +102,9 @@ const Payment = () => {
       address2: myAddress2,
       infos: myCartItems[0]?.order_id,
       pricetomileage: price * 0.1,
+      couponId: couponCost.split(",")[0],
     };
+
     await createAsyncPromise("patch", "/items/payment")(body);
     setState((e) => e + 1);
     location.replace("/");
@@ -136,12 +139,12 @@ const Payment = () => {
   const handleMileage = (e) => {
     setMyMileage(() => e.target.value);
   };
-  const handleChange = (e) => {
+  const handleCouponChange = (e) => {
     setCouponCost(e.target.value);
-    setCouponId(e.target.id);
   };
-
-  console.log("=============", couponCost, coupons[0].cost);
+  const myCoupon = couponCost.split(",")[1];
+  console.log("============", myCoupon);
+  console.log("=============", couponCost);
   return (
     <Page noToolbar>
       <Navbar title="결제" backLink="Back" />
@@ -171,7 +174,12 @@ const Payment = () => {
               </div>
               <div className="font-bold text-base  float-right">
                 <span className="font-bold text-2xl">
-                  {(calculatedPrice - myMileage).toLocaleString()}￦
+                  {(
+                    calculatedPrice -
+                    myMileage -
+                    (myCoupon === undefined ? 0 : myCoupon)
+                  ).toLocaleString()}
+                  ￦
                 </span>
               </div>
               <div className="line-through text-base mb-0 float-right text-gray-500">
@@ -201,20 +209,14 @@ const Payment = () => {
           errorMessageForce={true}
           onChange={handleMileage}
         ></ListInput>
-        <ListInput
-          label="쿠폰"
-          type="select"
-          defaultValue={coupons[0].cost}
-          value={coupons[0].cost}
-          onChange={handleChange}
-        >
+        <ListInput label="쿠폰" type="select" onChange={handleCouponChange}>
+          <option>쿠폰을 선택해주세요</option>
           {coupons.map((coupon) => {
             return (
               <option
                 name="coupons"
                 key={coupon.id}
-                value={coupon.cost}
-                id={coupon.id}
+                value={`${coupon.id},${coupon.cost}`}
               >
                 {coupon.name} : {coupon.cost}
               </option>

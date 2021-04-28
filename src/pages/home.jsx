@@ -23,14 +23,7 @@ import { getToken } from "../common/auth";
 import { logout } from "../common/api";
 const HomePage = () => {
   let loggedIn = !!getToken().token;
-  const images = [
-    "airpods",
-    "alexa",
-    "camera",
-    "iphone",
-    "mouse",
-    "playstation",
-  ];
+
   const [saleItems, setSaleItems] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState([]);
 
