@@ -42,6 +42,7 @@ module.exports = {
         },
       });
       if (result) {
+        console.log(1);
         throw res.status(401).send(err);
       } else {
         bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -56,7 +57,7 @@ module.exports = {
               phone,
             });
             let myToken = generateToken(email);
-
+            console.log(2);
             await Coupon.create({
               name: "신규가입쿠폰",
               user_id: info.id,

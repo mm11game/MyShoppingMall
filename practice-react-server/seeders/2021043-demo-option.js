@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert("Options", [
       {
         item_id: 1,
-        itemoption: "빨간색",
+        itemoption: "red",
         price: 1000000,
         sale: 1,
         createdAt: new Date(),
@@ -13,7 +13,7 @@ module.exports = {
       },
       {
         item_id: 1,
-        itemoption: "파란색",
+        itemoption: "blue",
         price: 1100000,
         sale: 1,
         createdAt: new Date(),
@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         item_id: 2,
-        itemoption: "흰색",
+        itemoption: "white",
         price: 50000,
         sale: 0.5,
         createdAt: new Date(),
@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         item_id: 2,
-        itemoption: "검정색",
+        itemoption: "black",
         price: 100000,
         sale: 0.5,
         createdAt: new Date(),
@@ -37,7 +37,7 @@ module.exports = {
       },
       {
         item_id: 3,
-        itemoption: "일본산",
+        itemoption: "japan",
         price: 200000,
         sale: 0.8,
         createdAt: new Date(),
@@ -45,7 +45,7 @@ module.exports = {
       },
       {
         item_id: 3,
-        itemoption: "미국산",
+        itemoption: "US",
         price: 250000,
         sale: 0.8,
         createdAt: new Date(),
@@ -53,7 +53,7 @@ module.exports = {
       },
       {
         item_id: 4,
-        itemoption: "단일",
+        itemoption: "single",
         price: 120000,
         sale: 1,
         createdAt: new Date(),
@@ -61,7 +61,7 @@ module.exports = {
       },
       {
         item_id: 4,
-        itemoption: "이중",
+        itemoption: "double",
         price: 160000,
         sale: 1,
         createdAt: new Date(),
@@ -69,7 +69,7 @@ module.exports = {
       },
       {
         item_id: 5,
-        itemoption: "볼",
+        itemoption: "ball",
         price: 50000,
         sale: 1,
         createdAt: new Date(),
@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         item_id: 5,
-        itemoption: "레이저",
+        itemoption: "layser",
         price: 60000,
         sale: 1,
         createdAt: new Date(),
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         item_id: 6,
-        itemoption: "중고",
+        itemoption: "used",
         price: 200000,
         sale: 0.5,
         createdAt: new Date(),
@@ -93,7 +93,7 @@ module.exports = {
       },
       {
         item_id: 6,
-        itemoption: "신품",
+        itemoption: "new",
         price: 240000,
         sale: 0.5,
         createdAt: new Date(),
@@ -102,7 +102,7 @@ module.exports = {
       ///////////////////////////////////////////////
       {
         item_id: 7,
-        itemoption: "1봉지",
+        itemoption: "1",
         price: 3000,
         sale: 0.5,
         createdAt: new Date(),
@@ -110,7 +110,7 @@ module.exports = {
       },
       {
         item_id: 7,
-        itemoption: "3봉지",
+        itemoption: "3",
         price: 8000,
         sale: 0.5,
         createdAt: new Date(),
@@ -118,7 +118,7 @@ module.exports = {
       },
       {
         item_id: 8,
-        itemoption: "딸기맛",
+        itemoption: "strawberry",
         price: 100000,
         sale: 0.8,
         createdAt: new Date(),
@@ -126,7 +126,7 @@ module.exports = {
       },
       {
         item_id: 8,
-        itemoption: "초코맛",
+        itemoption: "chocolate",
         price: 100000,
         sale: 0.8,
         createdAt: new Date(),
@@ -134,7 +134,7 @@ module.exports = {
       },
       {
         item_id: 9,
-        itemoption: "1봉지",
+        itemoption: "1",
         price: 1000,
         sale: 0.8,
         createdAt: new Date(),
@@ -142,7 +142,7 @@ module.exports = {
       },
       {
         item_id: 9,
-        itemoption: "3봉지",
+        itemoption: "3",
         price: 4000,
         sale: 0.8,
         createdAt: new Date(),
@@ -166,7 +166,7 @@ module.exports = {
       },
       {
         item_id: 11,
-        itemoption: "1병",
+        itemoption: "1",
         price: 10000,
         sale: 1,
         createdAt: new Date(),
@@ -174,7 +174,7 @@ module.exports = {
       },
       {
         item_id: 11,
-        itemoption: "3병",
+        itemoption: "3",
         price: 25000,
         sale: 1,
         createdAt: new Date(),
@@ -182,7 +182,7 @@ module.exports = {
       },
       {
         item_id: 12,
-        itemoption: "기본",
+        itemoption: "normal",
         price: 4000,
         sale: 0.5,
         createdAt: new Date(),
@@ -190,7 +190,7 @@ module.exports = {
       },
       {
         item_id: 12,
-        itemoption: "곱배기",
+        itemoption: "double",
         price: 5000,
         sale: 0.5,
         createdAt: new Date(),
@@ -199,7 +199,7 @@ module.exports = {
       ////////////////////////////////////////////
       {
         item_id: 13,
-        itemoption: "3발",
+        itemoption: "3",
         price: 50000,
         sale: 0.5,
         createdAt: new Date(),
@@ -207,7 +207,7 @@ module.exports = {
       },
       {
         item_id: 13,
-        itemoption: "4발",
+        itemoption: "4",
         price: 60000,
         sale: 0.5,
         createdAt: new Date(),
@@ -215,7 +215,7 @@ module.exports = {
       },
       {
         item_id: 14,
-        itemoption: "2접이식",
+        itemoption: "2",
         price: 1000000,
         sale: 0.8,
         createdAt: new Date(),
@@ -223,7 +223,7 @@ module.exports = {
       },
       {
         item_id: 14,
-        itemoption: "3접이식",
+        itemoption: "3",
         price: 1000000,
         sale: 0.8,
         createdAt: new Date(),
@@ -231,7 +231,7 @@ module.exports = {
       },
       {
         item_id: 15,
-        itemoption: "3인용",
+        itemoption: "3",
         price: 300000,
         sale: 0.8,
         createdAt: new Date(),
@@ -239,7 +239,7 @@ module.exports = {
       },
       {
         item_id: 15,
-        itemoption: "4인용",
+        itemoption: "4",
         price: 400000,
         sale: 0.8,
         createdAt: new Date(),
@@ -247,7 +247,7 @@ module.exports = {
       },
       {
         item_id: 16,
-        itemoption: "식탁용",
+        itemoption: "table",
         price: 100000,
         sale: 1,
         createdAt: new Date(),
@@ -255,7 +255,7 @@ module.exports = {
       },
       {
         item_id: 16,
-        itemoption: "책상용",
+        itemoption: "desk",
         price: 190000,
         sale: 1,
         createdAt: new Date(),
@@ -263,7 +263,7 @@ module.exports = {
       },
       {
         item_id: 17,
-        itemoption: "싱글",
+        itemoption: "single",
         price: 10000,
         sale: 1,
         createdAt: new Date(),
@@ -271,13 +271,12 @@ module.exports = {
       },
       {
         item_id: 17,
-        itemoption: "더블",
+        itemoption: "double",
         price: 25000,
         sale: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    
     ]);
   },
   down: (queryInterface, Sequelize) => {
